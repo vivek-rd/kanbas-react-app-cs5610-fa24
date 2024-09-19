@@ -8,7 +8,10 @@ export default function Labs() {
     <div>
       <h1>Labs</h1>
       <h3>Name - Vivek Rachakonda</h3>
-      <a href="https://github.com/vivek-rd/kanbas-react-app-cs5610-fa24">
+      <a
+        id="wd-github"
+        href="https://github.com/vivek-rd/kanbas-react-app-cs5610-fa24"
+      >
         Github Link
       </a>
       <TOC />

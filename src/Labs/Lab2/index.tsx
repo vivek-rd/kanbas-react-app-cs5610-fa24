@@ -19,8 +19,8 @@ import Margins from "./Margins";
 import Corners from "./Corners";
 import Dimensions from "./Dimensions";
 import RelativePositions from "./RelativePositions";
-import AbsolutePositions from "./AbsolutePositions";
 import FixedPositions from "./FixedPositions";
+import AbsolutePositions from "./AbsolutePositions";
 
 export default function Lab2() {
   return (

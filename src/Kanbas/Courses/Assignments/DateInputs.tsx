@@ -1,13 +1,18 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FaCalendarAlt } from "react-icons/fa";
 
-function DateInputs() {
+function DateInputs({ available_date }: any) {
   return (
     <div className="row g-3">
       <div className="col-md-6">
         <label htmlFor="wd-available-from">Available From</label>
         <div className="input-group mb-4">
-          <input type="date" id="wd-available-from" className="form-control" />
+          <input
+            type="date"
+            id="wd-available-from"
+            className="form-control"
+            value={available_date}
+          />
           {/* <span className="input-group-text">
             <FaCalendarAlt />
           </span> */}

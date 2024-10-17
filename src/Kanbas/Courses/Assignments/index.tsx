@@ -1,20 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import AssignmentsControls from "./AssignmentsControls";
 import LessonControlButtons from "../Modules/LessonControlButtons";
 import { BsGripVertical } from "react-icons/bs";
 import { GiNotebook } from "react-icons/gi";
 import AssignmentsControlButtons from "./AssignmentsControlButtons";
 
+import * as db from "../../Database";
+
 export default function Assignments() {
+  const { cid } = useParams();
+  const assignments = db.assignments;
   return (
     <div id="wd-assignments">
-      {/* <input id="wd-search-assignment" placeholder="Search for Assignments" />
-      <button id="wd-add-assignment-group">+ Group</button>
-      <button id="wd-add-assignment">+ Assignment</button> */}
       <AssignmentsControls></AssignmentsControls>
-      {/* <h3 id="wd-assignments-title">
-        ASSIGNMENTS 40% of Total <button>+</button>
-      </h3> */}
 
       <ul id="wd-assignments-list" className="list-group rounded-0">
         <li className="wd-assignments-list-item list-group-item p-0 mb-5 fs-5 border-gray">
@@ -24,7 +22,36 @@ export default function Assignments() {
             <AssignmentsControlButtons></AssignmentsControlButtons>
           </div>
           <ul className="wd-assignments-sub-list list-group rounded-0">
-            <li className="wd-assignments-sub-list-item list-group-item p-3 ps-1 d-flex align-items-center justify-content-between">
+            {assignments
+              .filter((assignment) => assignment.course === cid)
+              .map((assignment) => (
+                <li className="wd-assignments-sub-list-item list-group-item p-3 ps-1 d-flex align-items-center justify-content-between">
+                  <div className="col-auto d-flex align-items-center">
+                    <BsGripVertical className="fs-3 me-2" />
+                    <GiNotebook
+                      className="fs-4 me-3"
+                      style={{ color: "green" }}
+                    />
+                  </div>
+                  <div className="col d-flex flex-column align-items-left">
+                    <Link
+                      className="wd-assignment-link"
+                      to={`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
+                    >
+                      <span>{assignment.title}</span>
+                    </Link>
+                    <span>
+                      <span className="text-danger "> Multiple Modules</span> |{" "}
+                      <b>Not available until</b> May 6 at 12:00 AM | <b>Due</b>{" "}
+                      {assignment.due_date} | {assignment.points}
+                    </span>
+                  </div>
+                  <div className="col-auto">
+                    <LessonControlButtons />
+                  </div>
+                </li>
+              ))}
+            {/* <li className="wd-assignments-sub-list-item list-group-item p-3 ps-1 d-flex align-items-center justify-content-between">
               <div className="col-auto d-flex align-items-center">
                 <BsGripVertical className="fs-3 me-2" />
                 <GiNotebook className="fs-4 me-3" style={{ color: "green" }} />
@@ -89,7 +116,7 @@ export default function Assignments() {
               <div className="col-auto">
                 <LessonControlButtons />
               </div>
-            </li>
+            </li> */}
           </ul>
         </li>
       </ul>

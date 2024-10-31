@@ -1,39 +1,3 @@
-// import { FaPlus } from "react-icons/fa6";
-
-// export default function AssignmentsControls() {
-//   return (
-//     <div id="wd-assignment-controls" className="text-nowrap">
-//       <div className="input-group mb-3">
-//         <input
-//           id="wd-search-assignment"
-//           placeholder="Search..."
-//           className="form-control"
-//         />
-//       </div>
-//       <button
-//         id="wd-assignment-add"
-//         className="btn btn-lg btn-danger me-1 float-end"
-//       >
-//         <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
-//         Assignment
-//       </button>
-//       <div className="dropdown d-inline me-1 float-end">
-//         <button
-//           id="wd-assignment-group"
-//           className="btn btn-lg btn-secondary me-1"
-//           type="button"
-//         >
-//           <FaPlus
-//             className="position-relative me-2"
-//             style={{ bottom: "1px" }}
-//           />
-//           Group
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }
-
 import { FaPlus, FaSearch } from "react-icons/fa";
 
 export default function AssignmentsControls() {

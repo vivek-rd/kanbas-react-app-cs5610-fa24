@@ -1,11 +1,11 @@
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import AssignmentsControls from "./AssignmentsControls";
 import LessonControlButtons from "../Modules/LessonControlButtons";
 import { BsGripVertical } from "react-icons/bs";
 import { GiNotebook } from "react-icons/gi";
 import AssignmentsControlButtons from "./AssignmentsControlButtons";
-import { deleteAssignment } from "./reducer";
-import { useDispatch, useSelector } from "react-redux";
+
+import { useSelector } from "react-redux";
 import { FaTrash } from "react-icons/fa";
 import AssignmentDelete from "./AssignmentDelete";
 import { useState } from "react";
@@ -13,7 +13,7 @@ import { useState } from "react";
 export default function Assignments() {
   const { cid } = useParams();
   const { assignments } = useSelector((state: any) => state.assignmentReducer);
-  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
 
   // State to hold the assignmentId of the assignment to be deleted
   const [assignmentToDelete, setAssignmentToDelete] = useState(null);
@@ -44,7 +44,11 @@ export default function Assignments() {
                   <div className="col d-flex flex-column align-items-left">
                     <Link
                       className="wd-assignment-link"
-                      to={`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
+                      to={
+                        currentUser.role === "FACULTY"
+                          ? `/Kanbas/Courses/${cid}/Assignments/${assignment._id}`
+                          : `/Kanbas/Courses/${cid}/Assignments/`
+                      }
                     >
                       <span>{assignment.title}</span>
                     </Link>
@@ -55,24 +59,26 @@ export default function Assignments() {
                     </span>
                   </div>
                   <div className="col-auto">
-                    <button
-                      id="wd-delete-assignment-btn"
-                      className="btn btn-link text-danger border-0"
-                      data-bs-toggle="modal"
-                      data-bs-target="#wd-delete-assignment-dialog"
-                      onClick={() => setAssignmentToDelete(assignment._id)}
-                    >
-                      <FaTrash
-                        className="me-1"
-                        size={20}
-                        style={{
-                          position: "relative",
-                          top: "-2px",
-                          left: "2px",
-                        }}
-                        // onClick={() => ()}
-                      ></FaTrash>
-                    </button>
+                    {currentUser.role === "FACULTY" && (
+                      <button
+                        id="wd-delete-assignment-btn"
+                        className="btn btn-link text-danger border-0"
+                        data-bs-toggle="modal"
+                        data-bs-target="#wd-delete-assignment-dialog"
+                        onClick={() => setAssignmentToDelete(assignment._id)}
+                      >
+                        <FaTrash
+                          className="me-1"
+                          size={20}
+                          style={{
+                            position: "relative",
+                            top: "-2px",
+                            left: "2px",
+                          }}
+                          // onClick={() => ()}
+                        ></FaTrash>
+                      </button>
+                    )}
                     <LessonControlButtons />
                   </div>
                 </li>

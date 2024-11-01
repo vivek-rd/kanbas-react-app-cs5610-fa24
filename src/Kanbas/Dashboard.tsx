@@ -65,12 +65,14 @@ export default function Dashboard({
       )}
       <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2>{" "}
       <hr />
-      <button
-        className="btn btn-primary float-end"
-        onClick={() => setShowEnrollments(!showEnrollments)}
-      >
-        Enrollments
-      </button>
+      {currentUser.role === "STUDENT" && (
+        <button
+          className="btn btn-primary float-end"
+          onClick={() => setShowEnrollments(!showEnrollments)}
+        >
+          Enrollments
+        </button>
+      )}
       <div id="wd-dashboard-courses" className="row">
         <div className="row row-cols-1 row-cols-md-5 g-4">
           {courses

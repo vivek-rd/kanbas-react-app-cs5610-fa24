@@ -1,5 +1,4 @@
 import { useParams } from "react-router";
-import DateInputs from "./DateInputs";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addAssignment, updateAssignment } from "./reducer";
@@ -225,16 +224,38 @@ export default function AssignmentEditor() {
                 />
               </div>
             </div>
-
-            <DateInputs
-              id="wd-available_date"
-              available_date={
-                new Date(currentAssignment.available_date)
-                  .toISOString()
-                  .split("T")[0]
-              }
-              onChange={(e: any) => handleChange(e)}
-            ></DateInputs>
+            <div className="row g-3">
+              <div className="col-md-6">
+                <label htmlFor="wd-available_date">Available From</label>
+                <div className="input-group mb-4">
+                  <input
+                    type="date"
+                    id="wd-available_date"
+                    className="form-control"
+                    value={
+                      new Date(currentAssignment.available_date)
+                        .toISOString()
+                        .split("T")[0]
+                    }
+                    onChange={(e: any) => handleChange(e)}
+                  />
+                  {/* <span className="input-group-text">
+            <FaCalendarAlt />
+          </span> */}
+                </div>
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="wd-available_until">Until</label>
+                <div className="input-group mb-4">
+                  <input
+                    type="date"
+                    id="wd-available_until"
+                    className="form-control"
+                    onChange={(e: any) => handleChange(e)}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <hr />

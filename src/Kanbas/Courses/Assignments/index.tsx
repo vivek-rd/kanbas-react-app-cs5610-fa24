@@ -4,17 +4,29 @@ import LessonControlButtons from "../Modules/LessonControlButtons";
 import { BsGripVertical } from "react-icons/bs";
 import { GiNotebook } from "react-icons/gi";
 import AssignmentsControlButtons from "./AssignmentsControlButtons";
+import * as coursesClient from "../client";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FaTrash } from "react-icons/fa";
 import AssignmentDelete from "./AssignmentDelete";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { setAssignments } from "./reducer";
 
 export default function Assignments() {
   const { cid } = useParams();
+  const dispatch = useDispatch();
   const { assignments } = useSelector((state: any) => state.assignmentReducer);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
 
+  const fetchAssignments = async () => {
+    const assignments = await coursesClient.findAssignmentsForCourse(
+      cid as string
+    );
+    dispatch(setAssignments(assignments));
+  };
+  useEffect(() => {
+    fetchAssignments();
+  }, []);
   // State to hold the assignmentId of the assignment to be deleted
   const [assignmentToDelete, setAssignmentToDelete] = useState(null);
 
@@ -31,7 +43,7 @@ export default function Assignments() {
           </div>
           <ul className="wd-assignments-sub-list list-group rounded-0">
             {assignments
-              .filter((assignment: any) => assignment.course === cid)
+              // .filter((assignment: any) => assignment.course === cid)
               .map((assignment: any) => (
                 <li className="wd-assignments-sub-list-item list-group-item p-3 ps-1 d-flex align-items-center justify-content-between">
                   <div className="col-auto d-flex align-items-center">

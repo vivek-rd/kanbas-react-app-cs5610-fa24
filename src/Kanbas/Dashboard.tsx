@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
-import { enroll, unenroll } from "./reducer";
+import { useEffect, useState } from "react";
+import { enroll, unenroll, setEnrollments } from "./reducer";
+import * as enrollmentClient from "./client";
 
 export default function Dashboard({
   courses,
@@ -22,6 +23,35 @@ export default function Dashboard({
   const { enrollments } = useSelector((state: any) => state.enrollmentReducer);
   const [showEnrollments, setShowEnrollments] = useState(false);
   const dispatch = useDispatch();
+
+  const enrollFunction = async (userId: any, courseId: any) => {
+    await enrollmentClient.enrollStudent(userId, courseId);
+    dispatch(
+      enroll({
+        course: courseId,
+        user: userId,
+      })
+    );
+  };
+
+  const unenrollFunction = async (userId: any, courseId: any) => {
+    await enrollmentClient.unenrollStudent(userId, courseId);
+    dispatch(
+      unenroll({
+        course: courseId,
+        user: userId,
+      })
+    );
+  };
+
+  const getEnrollments = async () => {
+    const enrollments = await enrollmentClient.getEnrollments(currentUser._id);
+    dispatch(setEnrollments(enrollments));
+  };
+
+  useEffect(() => {
+    getEnrollments();
+  }, [currentUser]);
 
   return (
     <div id="wd-dashboard">
@@ -124,14 +154,9 @@ export default function Dashboard({
                         ) ? (
                           <button
                             className="btn btn-danger float-end"
-                            onClick={() =>
-                              dispatch(
-                                unenroll({
-                                  course: course._id,
-                                  user: currentUser._id,
-                                })
-                              )
-                            }
+                            onClick={() => {
+                              unenrollFunction(currentUser._id, course._id);
+                            }}
                           >
                             Unenroll
                           </button>
@@ -139,16 +164,7 @@ export default function Dashboard({
                           <button
                             className="btn btn-success float-end"
                             onClick={() => {
-                              console.log({
-                                course: course,
-                                user: currentUser,
-                              });
-                              dispatch(
-                                enroll({
-                                  course: course._id,
-                                  user: currentUser._id,
-                                })
-                              );
+                              enrollFunction(currentUser._id, course._id);
                             }}
                           >
                             Enroll

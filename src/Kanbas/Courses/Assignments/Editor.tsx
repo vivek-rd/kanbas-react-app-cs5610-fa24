@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addAssignment, updateAssignment } from "./reducer";
 import { useState } from "react";
+import * as coursesClient from "../client";
+import * as assignmentsClient from "./client";
 
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
@@ -34,6 +36,19 @@ export default function AssignmentEditor() {
     setCurrentAssignment(updated);
   };
 
+  const updateAssignmentClient = async () => {
+    await assignmentsClient.updateAssignment(currentAssignment);
+    dispatch(updateAssignment(currentAssignment));
+  };
+
+  const addAssignmentClient = async () => {
+    await coursesClient.createAssignmentForCourse(
+      cid as string,
+      currentAssignment
+    );
+    dispatch(addAssignment(currentAssignment));
+  };
+
   const saveAssignment = (currentAssignment: any) => {
     console.log(currentAssignment);
     if (
@@ -41,9 +56,9 @@ export default function AssignmentEditor() {
         (assignment: any) => assignment._id === currentAssignment._id
       )
     ) {
-      dispatch(updateAssignment(currentAssignment));
+      updateAssignmentClient();
     } else {
-      dispatch(addAssignment(currentAssignment));
+      addAssignmentClient();
     }
   };
 

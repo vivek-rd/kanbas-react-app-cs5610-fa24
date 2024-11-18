@@ -1,9 +1,14 @@
 import React from "react";
-import { deleteAssignment } from "./reducer";
 import { useDispatch } from "react-redux";
+import { deleteAssignment } from "./reducer";
+import * as assignmentClient from "./client";
 
 function AssignmentDelete({ assignmentId }: { assignmentId: any }) {
   const dispatch = useDispatch();
+  const removeAssignment = async (assignmentId: string) => {
+    await assignmentClient.deleteAssignment(assignmentId);
+    dispatch(deleteAssignment(assignmentId));
+  };
 
   return (
     <div
@@ -27,14 +32,6 @@ function AssignmentDelete({ assignmentId }: { assignmentId: any }) {
               data-bs-dismiss="modal"
             ></button>
           </div>
-          {/* <div className="modal-body">
-        <input
-          className="form-control"
-          value={moduleName}
-          placeholder="Module Name"
-          onChange={(e) => setModuleName(e.target.value)}
-        />
-      </div> */}
           <div className="modal-footer">
             <button
               type="button"
@@ -44,7 +41,7 @@ function AssignmentDelete({ assignmentId }: { assignmentId: any }) {
               Cancel{" "}
             </button>
             <button
-              onClick={() => dispatch(deleteAssignment(assignmentId))}
+              onClick={() => removeAssignment(assignmentId)}
               type="button"
               data-bs-dismiss="modal"
               className="btn btn-danger"

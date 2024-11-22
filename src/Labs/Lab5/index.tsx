@@ -25,6 +25,7 @@ function Lab5() {
       <QueryParameters></QueryParameters>
       <WorkingWithObjects></WorkingWithObjects>
       <WorkingWithArrays></WorkingWithArrays>
+      <hr />
       <HttpClient></HttpClient>
       <WorkingWithObjectsAsynchronously></WorkingWithObjectsAsynchronously>
       <WorkingWithArraysAsynchronously></WorkingWithArraysAsynchronously>

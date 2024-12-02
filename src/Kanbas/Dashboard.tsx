@@ -11,6 +11,9 @@ export default function Dashboard({
   addNewCourse,
   deleteCourse,
   updateCourse,
+  enrolling,
+  setEnrolling,
+  updateEnrollment,
 }: {
   courses: any[];
   course: any;
@@ -18,44 +21,56 @@ export default function Dashboard({
   addNewCourse: () => void;
   deleteCourse: (course: any) => void;
   updateCourse: () => void;
+  enrolling: boolean;
+  setEnrolling: (enrolling: boolean) => void;
+  updateEnrollment: (courseId: string, enrolled: boolean) => void;
 }) {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { enrollments } = useSelector((state: any) => state.enrollmentReducer);
   const [showEnrollments, setShowEnrollments] = useState(false);
   const dispatch = useDispatch();
 
-  const enrollFunction = async (userId: any, courseId: any) => {
-    await enrollmentClient.enrollStudent(userId, courseId);
-    dispatch(
-      enroll({
-        course: courseId,
-        user: userId,
-      })
-    );
-  };
+  // const enrollFunction = async (userId: any, courseId: any) => {
+  //   await enrollmentClient.enrollStudent(userId, courseId);
+  //   dispatch(
+  //     enroll({
+  //       course: courseId,
+  //       user: userId,
+  //     })
+  //   );
+  // };
 
-  const unenrollFunction = async (userId: any, courseId: any) => {
-    await enrollmentClient.unenrollStudent(userId, courseId);
-    dispatch(
-      unenroll({
-        course: courseId,
-        user: userId,
-      })
-    );
-  };
+  // const unenrollFunction = async (userId: any, courseId: any) => {
+  //   await enrollmentClient.unenrollStudent(userId, courseId);
+  //   dispatch(
+  //     unenroll({
+  //       course: courseId,
+  //       user: userId,
+  //     })
+  //   );
+  // };
 
-  const getEnrollments = async () => {
-    const enrollments = await enrollmentClient.getEnrollments(currentUser._id);
-    dispatch(setEnrollments(enrollments));
-  };
+  // const getEnrollments = async () => {
+  //   const enrollments = await enrollmentClient.getEnrollments(currentUser._id);
+  //   dispatch(setEnrollments(enrollments));
+  // };
 
-  useEffect(() => {
-    getEnrollments();
-  }, [currentUser]);
+  // useEffect(() => {
+  //   getEnrollments();
+  // }, [currentUser]);
 
   return (
     <div id="wd-dashboard">
-      <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
+      <h1 id="wd-dashboard-title">
+        Dashboard
+        <button
+          onClick={() => setEnrolling(!enrolling)}
+          className="float-end btn btn-primary"
+        >
+          {enrolling ? "My Courses" : "All Courses"}
+        </button>
+      </h1>{" "}
+      <hr />
       {currentUser.role === "FACULTY" && (
         <>
           <h5>
@@ -95,26 +110,27 @@ export default function Dashboard({
       )}
       <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2>{" "}
       <hr />
-      {currentUser.role === "STUDENT" && (
+      {/* {currentUser.role === "STUDENT" && (
         <button
           className="btn btn-primary float-end"
           onClick={() => setShowEnrollments(!showEnrollments)}
         >
           Enrollments
         </button>
-      )}
+      )} */}
       <div id="wd-dashboard-courses" className="row">
         <div className="row row-cols-1 row-cols-md-5 g-4">
           {courses
-            .filter(
-              (course) =>
-                showEnrollments ||
-                enrollments.some(
-                  (enrollment: any) =>
-                    enrollment.user === currentUser._id &&
-                    enrollment.course === course._id
-                )
-            )
+            // TODO - need to remove filtering
+            // .filter(
+            //   (course) => showEnrollments
+            //   ||
+            //   enrollments.some(
+            //     (enrollment: any) =>
+            //       enrollment.user === currentUser._id &&
+            //       enrollment.course === course._id
+            //   )
+            // )
             .map((course) => (
               <div
                 className="wd-dashboard-course col"
@@ -124,6 +140,19 @@ export default function Dashboard({
                   <img src="/images/reactjs.jpg" width="100%" height={160} />
                   <div className="card-body">
                     <h5 className="wd-dashboard-course-title card-title">
+                      {enrolling && (
+                        <button
+                          onClick={(event) => {
+                            event.preventDefault();
+                            updateEnrollment(course._id, !course.enrolled);
+                          }}
+                          className={`btn ${
+                            course.enrolled ? "btn-danger" : "btn-success"
+                          } float-end`}
+                        >
+                          {course.enrolled ? "Unenroll" : "Enroll"}
+                        </button>
+                      )}
                       {course.name}{" "}
                     </h5>
                     <p
@@ -132,20 +161,16 @@ export default function Dashboard({
                     >
                       {course.description}{" "}
                     </p>
-                    {enrollments.find(
-                      (enrollment: any) =>
-                        enrollment.user === currentUser._id &&
-                        enrollment.course === course._id
-                    ) && (
+                    {
                       <Link
                         to={`/Kanbas/Courses/${course._id}/Home`}
                         className="wd-dashboard-course-link text-decoration-none text-dark"
                       >
                         <button className="btn btn-primary"> Go </button>
                       </Link>
-                    )}
+                    }
 
-                    {currentUser.role === "STUDENT" && showEnrollments && (
+                    {/* {currentUser.role === "STUDENT" && enrollments && (
                       <>
                         {enrollments.find(
                           (enrollment: any) =>
@@ -171,7 +196,8 @@ export default function Dashboard({
                           </button>
                         )}
                       </>
-                    )}
+                    )} */}
+
                     {currentUser.role === "FACULTY" && (
                       <>
                         <button
